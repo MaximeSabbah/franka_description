@@ -170,7 +170,7 @@
           with_sc="${with_sc}" />
     </xacro:if>
 
-    <xacro:if value="${hand and ee_id != 'none' and ee_id != 'franka_hand' and ee_id != 'franka_hand_with_camera' and ee_id != 'ati_mini45_with_camera' and ee_id != 'ati_mini45_no_camera'}">
+    <xacro:if value="${hand and ee_id != 'none' and ee_id != 'franka_hand' and ee_id != 'franka_hand_with_camera' and ee_id != 'ati_mini45_with_camera' and ee_id != 'ati_mini45_no_camera' and ee_id != 'franka_hand_with_camera'}">
       <xacro:include filename="$(find franka_description)/end_effectors/common/ee_with_one_link.xacro"/>
       <xacro:include filename="$(find franka_description)/end_effectors/common/utils.xacro" />
       <xacro:include filename="$(find franka_description)/end_effectors/$(arg ee_id)/$(arg ee_id)_arguments.xacro" />
@@ -215,7 +215,7 @@
 
       <!-- use_mesh="true" produces an error when visualizing with rviz2
       because the generated urdf contains mesh filename paths that do not start with file:// -->
-      <xacro:sensor_d435 parent="${arm_id}_ref_camera_link" name="camera" use_nominal_extrinsics="true" use_mesh="true">
+      <xacro:sensor_d435 parent="${arm_id}_ref_camera_link" name="camera" use_nominal_extrinsics="false" use_mesh="true">
         <origin xyz="0 0 0" rpy="0 0 0"/>
       </xacro:sensor_d435>
 
