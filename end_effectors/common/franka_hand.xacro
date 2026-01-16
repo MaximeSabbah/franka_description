@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hand">
   <!-- safety_distance: Minimum safety distance in [m] by which the collision volumes are expanded and which is enforced during robot motions -->
-  <xacro:macro name="franka_hand" params="connected_to:='' arm_id arm_prefix:='' ee_id ee_inertials rpy_ee:='0 0 0' xyz_ee:='0 0 0' tcp_xyz:='0 0 0.1034' tcp_rpy:='0 0 0' safety_distance:=0 gazebo:=false description_pkg:=franka_description with_sc:=false">
+  <xacro:macro name="franka_hand" params="connected_to:='' arm_id arm_prefix:='' ee_id ee_inertials rpy_ee:='0 0 0' xyz_ee:='0 0 0' tcp_xyz:='0 0 0.1034' tcp_rpy:='0 0 0' safety_distance:=0 gazebo:=false description_pkg:=franka_description with_sc:=false mesh_offset_xyz:='0 0 0' mesh_offset_rpy:='0 0 0'">
     <xacro:property name="ee_prefix" default="robot_"/>
     <xacro:unless value="${arm_id == ''}">
       <xacro:property name="ee_prefix" value="${arm_prefix}${arm_id}_" />
@@ -14,7 +14,16 @@
       </joint>
     </xacro:unless>
 
-    <xacro:ee_link_with_sc name="hand" gazebo="${gazebo}" with_sc="${with_sc}">
+    <xacro:property name="finger_visual_rpy_right"
+                    value="${mesh_offset_rpy.split(' ')[0]} ${mesh_offset_rpy.split(' ')[1]} ${float(mesh_offset_rpy.split(' ')[2]) + pi}" />
+
+    <xacro:ee_link_with_sc name="hand"
+                           gazebo="${gazebo}"
+                           with_sc="${with_sc}"
+                           visual_xyz="${mesh_offset_xyz}"
+                           visual_rpy="${mesh_offset_rpy}"
+                           collision_xyz="${mesh_offset_xyz}"
+                           collision_rpy="${mesh_offset_rpy}">
       <self_collision_geometries>
         <xacro:collision_capsule xyz="0 0 0.04" direction="y" radius="${0.04+safety_distance}" length="0.1" />
         <xacro:collision_capsule xyz="0 0 0.10" direction="y" radius="${0.02+safety_distance}" length="0.1" />
@@ -30,6 +39,7 @@
     </joint>
     <link name="${ee_prefix}leftfinger">
       <visual name="${ee_prefix}leftfinger_visual">
+        <origin xyz="${mesh_offset_xyz}" rpy="${mesh_offset_rpy}" />
         <geometry>
           <mesh filename="package://${description_pkg}/meshes/robot_ee/${ee_id}/visual/finger.dae" />
         </geometry>
@@ -68,7 +78,7 @@
     </link>
     <link name="${ee_prefix}rightfinger">
       <visual name="${ee_prefix}rightfinger_visual">
-        <origin xyz="0 0 0" rpy="0 0 ${pi}" />
+        <origin xyz="${mesh_offset_xyz}" rpy="${finger_visual_rpy_right}" />
         <geometry>
           <mesh filename="package://${description_pkg}/meshes/robot_ee/${ee_id}/visual/finger.dae" />
         </geometry>

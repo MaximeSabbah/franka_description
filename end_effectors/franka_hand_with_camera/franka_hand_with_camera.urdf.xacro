@@ -11,8 +11,10 @@
     </xacro:unless>
     <xacro:property name="camera_support_offset_xyz" value="0 0 0" />
     <xacro:property name="camera_support_offset_rpy" value="0 0 0" />
-    <xacro:property name="hand_offset_xyz" value="0 0 0.1" />
-    <xacro:property name="hand_offset_rpy" value="0 0 0.1" />
+    <xacro:property name="hand_offset_xyz" value="0 0 0.0065" />
+    <xacro:property name="hand_offset_rpy" value="0 0 0" />
+    <xacro:property name="mesh_offset_xyz" value="0 0 0" />
+    <xacro:property name="mesh_offset_rpy" value="0 0 -${pi / 4}" />
 
     <xacro:unless value="${connected_to == ''}">
       <joint name="${ee_prefix}camera_support_joint" type="fixed">
@@ -29,7 +31,7 @@
         <inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0" iyz="0" ixz="0"/>
       </inertial>
       <visual>
-        <origin xyz="0.022 0 -0.012" rpy="${pi} 0 -${pi / 2}"/>
+        <origin xyz="0.0 0 0.0035" rpy="0 0 -${pi / 4}"/>
         <geometry>
           <mesh filename="package://franka_description/meshes/robot_ee/franka_hand_with_camera/camera_support.stl" />
         </geometry>
@@ -38,7 +40,7 @@
         </material>
       </visual>
       <collision>
-        <origin xyz="0.022 0 -0.012" rpy="${pi} 0 -${pi / 2}"/>
+        <origin xyz="0.0 0 0.0035" rpy="0 0 -${pi / 4}"/>
         <geometry>
           <mesh filename="package://franka_description/meshes/robot_ee/franka_hand_with_camera/camera_support.stl" />
         </geometry>
@@ -52,6 +54,8 @@
                        ee_inertials="${ee_inertials}"
                        rpy_ee="${hand_offset_rpy}"
                        xyz_ee="${hand_offset_xyz}"
+                       mesh_offset_xyz="${mesh_offset_xyz}"
+                       mesh_offset_rpy="${mesh_offset_rpy}"
                        tcp_xyz="${tcp_xyz}"
                        tcp_rpy="${tcp_rpy}"
                        safety_distance="${safety_distance}"

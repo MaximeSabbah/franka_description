@@ -23,10 +23,11 @@ from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.substitutions import LaunchConfiguration
 
 
-def robot_state_publisher_spawner(context: LaunchContext, arm_id, load_gripper, ee_id):
+def robot_state_publisher_spawner(context: LaunchContext, arm_id, load_gripper, ee_id, use_camera):
     arm_id_str = context.perform_substitution(arm_id)
     load_gripper_str = context.perform_substitution(load_gripper)
     ee_id_str = context.perform_substitution(ee_id)
+    use_camera_str = context.perform_substitution(use_camera)
     franka_xacro_filepath = os.path.join(
         get_package_share_directory("franka_description"),
         "robots",
@@ -34,7 +35,12 @@ def robot_state_publisher_spawner(context: LaunchContext, arm_id, load_gripper, 
         arm_id_str + ".urdf.xacro",
     )
     robot_description = xacro.process_file(
-        franka_xacro_filepath, mappings={"hand": load_gripper_str, "ee_id": ee_id_str}
+        franka_xacro_filepath,
+        mappings={
+            "hand": load_gripper_str,
+            "ee_id": ee_id_str,
+            "use_camera": use_camera_str,
+        },
     ).toprettyxml(indent="  ")
 
     return [
@@ -55,6 +61,9 @@ def generate_launch_description():
     ee_id_parameter_name = "ee_id"
     ee_id = LaunchConfiguration(ee_id_parameter_name)
 
+    use_camera_parameter_name = "use_camera"
+    use_camera = LaunchConfiguration(use_camera_parameter_name)
+
     arm_id_parameter_name = "arm_id"
     arm_id = LaunchConfiguration(arm_id_parameter_name)
 
@@ -65,7 +74,8 @@ def generate_launch_description():
     )
 
     robot_state_publisher_spawner_opaque_function = OpaqueFunction(
-        function=robot_state_publisher_spawner, args=[arm_id, load_gripper, ee_id]
+        function=robot_state_publisher_spawner,
+        args=[arm_id, load_gripper, ee_id, use_camera],
     )
 
     return LaunchDescription(
@@ -81,7 +91,12 @@ def generate_launch_description():
                 ee_id_parameter_name,
                 default_value="franka_hand",
                 description="ID of the type of end-effector used. Supporter values: "
-                "none, franka_hand, cobot_pump",
+                "none, franka_hand, franka_hand_with_camera, cobot_pump",
+            ),
+            DeclareLaunchArgument(
+                use_camera_parameter_name,
+                default_value="false",
+                description="Enable the RealSense camera model if true.",
             ),
             DeclareLaunchArgument(
                 arm_id_parameter_name,
