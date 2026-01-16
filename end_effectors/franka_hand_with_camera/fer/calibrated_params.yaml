@@ -1,12 +1,12 @@
 ---
-# Translation between fer_link8 and camera_link. Calibration LAAS
-# Since calibration is robot-specific hardcoding of the camera link name can be acceptable here
+# Transform between fer_link8 and fer_ref_camera_link
 camera:
   parent_frame: fer_link8
-  x: 0.00964083
-  y: -0.0603896
-  z: 0.0391917
-  roll: 3.13991
-  pitch: 3.13863
-  yaw: -2.39719
+  x: 0.02506404
+  y: -0.02921068
+  z: 0.02847444
+  roll: 1.05427421
+  pitch: -1.56738918
+  yaw: 1.26092726
+
   
