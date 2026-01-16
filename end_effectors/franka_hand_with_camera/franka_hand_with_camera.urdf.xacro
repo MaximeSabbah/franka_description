@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="franka_hand_with_camera">
+  <xacro:include filename="$(find franka_description)/end_effectors/common/utils.xacro" />
+  <xacro:include filename="$(find franka_description)/end_effectors/common/franka_hand.xacro"/>
+  <xacro:include filename="$(find franka_description)/end_effectors/franka_hand_with_camera/franka_hand_with_camera_arguments.xacro"/>
+
+  <xacro:macro name="franka_hand_with_camera" params="connected_to:='' arm_id arm_prefix:='' ee_id ee_inertials rpy_ee:='0 0 0' xyz_ee:='0 0 0' tcp_xyz:='0 0 0.1034' tcp_rpy:='0 0 0' safety_distance:=0 gazebo:=false description_pkg:=franka_description with_sc:=false hand_mesh_id:='franka_hand_white'">
+    <xacro:property name="ee_prefix" default="robot_"/>
+    <xacro:unless value="${arm_id == ''}">
+      <xacro:property name="ee_prefix" value="${arm_prefix}${arm_id}_" />
+    </xacro:unless>
+    <xacro:property name="camera_support_offset_xyz" value="0 0 0" />
+    <xacro:property name="camera_support_offset_rpy" value="0 0 0" />
+    <xacro:property name="hand_offset_xyz" value="0 0 0.1" />
+    <xacro:property name="hand_offset_rpy" value="0 0 0.1" />
+
+    <xacro:unless value="${connected_to == ''}">
+      <joint name="${ee_prefix}camera_support_joint" type="fixed">
+        <parent link="${connected_to}" />
+        <child link="${ee_prefix}camera_support_link" />
+        <origin xyz="${camera_support_offset_xyz}" rpy="${camera_support_offset_rpy}" />
+      </joint>
+    </xacro:unless>
+
+    <link name="${ee_prefix}camera_support_link">
+      <inertial>
+        <mass value="0.010"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0" iyz="0" ixz="0"/>
+      </inertial>
+      <visual>
+        <origin xyz="0.022 0 -0.012" rpy="${pi} 0 -${pi / 2}"/>
+        <geometry>
+          <mesh filename="package://franka_description/meshes/robot_ee/franka_hand_with_camera/camera_support.stl" />
+        </geometry>
+        <material name="camera_support">
+          <color rgba="0 0.0 0.0 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.022 0 -0.012" rpy="${pi} 0 -${pi / 2}"/>
+        <geometry>
+          <mesh filename="package://franka_description/meshes/robot_ee/franka_hand_with_camera/camera_support.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <xacro:franka_hand connected_to="${ee_prefix}camera_support_link"
+                       arm_id="${arm_id}"
+                       arm_prefix="${arm_prefix}"
+                       ee_id="${hand_mesh_id}"
+                       ee_inertials="${ee_inertials}"
+                       rpy_ee="${hand_offset_rpy}"
+                       xyz_ee="${hand_offset_xyz}"
+                       tcp_xyz="${tcp_xyz}"
+                       tcp_rpy="${tcp_rpy}"
+                       safety_distance="${safety_distance}"
+                       gazebo="${gazebo}"
+                       description_pkg="${description_pkg}"
+                       with_sc="${with_sc}">
+    </xacro:franka_hand>
+  </xacro:macro>
+
+</robot>
