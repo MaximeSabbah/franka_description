@@ -215,7 +215,7 @@
 
       <!-- use_mesh="true" produces an error when visualizing with rviz2
       because the generated urdf contains mesh filename paths that do not start with file:// -->
-      <xacro:sensor_d435 parent="${arm_id}_ref_camera_link" name="camera" use_nominal_extrinsics="false" use_mesh="true">
+      <xacro:sensor_d435 parent="${arm_id}_ref_camera_link" name="camera" use_nominal_extrinsics="true" use_mesh="true">
         <origin xyz="0 0 0" rpy="0 0 0"/>
       </xacro:sensor_d435>
 

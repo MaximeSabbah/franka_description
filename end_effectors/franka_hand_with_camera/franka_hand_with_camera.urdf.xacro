@@ -12,9 +12,9 @@
     <xacro:property name="camera_support_offset_xyz" value="0 0 0" />
     <xacro:property name="camera_support_offset_rpy" value="0 0 0" />
     <xacro:property name="hand_offset_xyz" value="0 0 0.0065" />
-    <xacro:property name="hand_offset_rpy" value="0 0 0" />
+    <xacro:property name="hand_offset_rpy" value="0 0 -0.7853981633974483" />
     <xacro:property name="mesh_offset_xyz" value="0 0 0" />
-    <xacro:property name="mesh_offset_rpy" value="0 0 -${pi / 4}" />
+    <xacro:property name="mesh_offset_rpy" value="0 0 0" />
 
     <xacro:unless value="${connected_to == ''}">
       <joint name="${ee_prefix}camera_support_joint" type="fixed">
