@@ -2,11 +2,11 @@
 # Transform between fer_link8 and fer_ref_camera_link
 camera:
   parent_frame: fer_link8
-  x: 0.029656
-  y: -0.0554124
-  z: 0.0280456
-  roll: 0.0150071
-  pitch: 0.0842443
-  yaw: 0.76558
+  x: 0.0169632
+  y: -0.0641675
+  z: 0.0182804
+  roll: 0.0109505
+  pitch: 0.0799445
+  yaw: 0.750178
 
   

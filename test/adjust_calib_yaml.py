@@ -4,9 +4,9 @@ Adjust MoveIt eye-in-hand calibration output (EEF -> camera_optical) into the mo
 expected by a URDF joint (EEF -> camera_mount_link), using the camera's fixed frame chain in URDF.
 
 Assumptions:
-- MoveIt calibration output in YAML encodes:  fer_link8 -> camera_infra1_optical_frame
+- MoveIt calibration output in YAML encodes:  fer_link8 -> camera_color_optical_frame
   (translation xyz in meters, and roll/pitch/yaw in radians).
-- URDF contains fixed joints that define:       fer_ref_camera_link -> camera_infra1_optical_frame
+- URDF contains fixed joints that define:       fer_ref_camera_link -> camera_color_optical_frame
 - You want to write YAML encoding:              fer_link8 -> fer_ref_camera_link
 
 python3 adjust_calib_yaml.py \
@@ -186,7 +186,7 @@ def main():
     ap.add_argument("--out-yaml", required=True, type=Path, help="Output YAML (rewritten for URDF joint).")
     ap.add_argument("--yaml-section", default="camera", help="Top-level key that holds x,y,z,roll,pitch,yaw.")
     ap.add_argument("--eef-frame", default="fer_link8", help="EEF link frame used in calibration.")
-    ap.add_argument("--optical-frame", default="camera_infra1_optical_frame", help="Camera optical frame.")
+    ap.add_argument("--optical-frame", default="camera_color_optical_frame", help="Camera optical frame.")
     ap.add_argument("--mount-frame", default="fer_ref_camera_link", help="URDF mount link frame (child of EEF joint).")
     ap.add_argument("--assume-input-is-eef-to-optical", action="store_true",
                     help="If set, interpret input YAML as EEF->Optical. (Recommended)")
